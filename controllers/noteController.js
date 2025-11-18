@@ -24,7 +24,7 @@ export const getNotes = async (req, res) => {
   try {
     const notes = await noteModel.find();
     if (notes.length === 0) {
-      return res.status(400).json({ message: "No notes stored." });
+      return res.status(200).json({ message: "No notes stored." });
     }
 
     const formattedNotes = notes.map((note) => ({
@@ -114,7 +114,7 @@ export const updateNote = async (req, res) => {
 export const deleteNote = async (req, res) => {
   try {
     const id = req.params.id;
-    const noteExist = await noteModel.findOne({ _id: id });
+    const noteExist = await noteModel.findById(id);
     if (!noteExist) {
       return res.status(404).json({ message: "Note not found." });
     }
