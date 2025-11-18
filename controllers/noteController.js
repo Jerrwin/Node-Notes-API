@@ -40,3 +40,35 @@ export const getNotes = async (req, res) => {
     res.status(500).json({ error: error });
   }
 };
+
+//searchNotes using GET
+export const searchNotes = async (req, res) => {
+  try {
+    const { title } = req.query;
+
+    if (!title) {
+      return res
+        .status(400)
+        .json({ message: "Please provide a title to search" });
+    }
+    const notes = await noteModel.find({
+      title: { $regex: title, $options: "i" },
+    });
+
+    if (notes.length === 0) {
+      return res.status(404).json({ message: "No notes found." });
+    }
+
+    const formattedNotes = notes.map((note) => ({
+      id: note._id,
+      title: note.title,
+      content: note.content,
+      tags: note.tags.join(", "),
+      createdAt: note.createdAt.toLocaleString(),
+    }));
+
+    res.status(200).json({ notes: formattedNotes });
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
