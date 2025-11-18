@@ -1,19 +1,18 @@
 import mongoose from "mongoose";
 
-const noteSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
+const noteSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+    tags: [String],
   },
-  content: {
-    type: String,
-    required: true,
-  },
-  tags: [String],
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  { timestamps: true }
+);
 
 export default mongoose.model("Note", noteSchema);
