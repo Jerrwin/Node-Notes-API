@@ -15,7 +15,7 @@ export const createNote = async (req, res) => {
     const savedNote = await noteData.save();
     res.status(200).json({ savedNote });
   } catch (error) {
-    res.status(500).json({ error: error });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -38,7 +38,7 @@ export const getNotes = async (req, res) => {
 
     res.status(200).json({ notes: formattedNotes });
   } catch (error) {
-    res.status(500).json({ error: error });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -71,7 +71,7 @@ export const searchNotes = async (req, res) => {
 
     res.status(200).json({ notes: formattedNotes });
   } catch (error) {
-    res.status(500).json({ error: error });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -86,7 +86,6 @@ export const updateNote = async (req, res) => {
       return res.status(404).json({ message: "Note not found." });
     }
 
-    // This safely updates only provided fields
     const updatedNote = await noteModel.findByIdAndUpdate(id, req.body, {
       new: true,
       runValidators: true,
@@ -108,5 +107,20 @@ export const updateNote = async (req, res) => {
       return res.status(400).json({ message: "Invalid note ID" });
     }
     res.status(500).json({ error: error.message });
+  }
+};
+
+//Delete using DELETE
+export const deleteNote = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const noteExist = await noteModel.findOne({ _id: id });
+    if (!noteExist) {
+      return res.status(404).json({ message: "Note not found." });
+    }
+    await noteModel.findByIdAndDelete(id);
+    res.status(202).json({ message: "Note deleted." });
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
   }
 };
