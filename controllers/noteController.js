@@ -124,3 +124,56 @@ export const deleteNote = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+// Search notes by tag(s) using GET
+// Example: GET /notes/tags?tag=work,urgent   OR   GET /notes/tags?tag=shopping
+export const searchByTag = async (req, res) => {
+  try {
+    const { tag } = req.query;
+
+    if (!tag || tag.trim() === "") {
+      return res
+        .status(400)
+        .json({ message: "Please provide at least one tag to search" });
+    }
+
+    // Split comma-separated tags and trim whitespace
+    const tagsArray = tag
+      .split(",")
+      .map((t) => t.trim())
+      .filter((t) => t.length > 0);
+
+    // Search for notes that have ANY of the provided tags
+    const notes = await noteModel.find({
+      tags: { $in: tagsArray }, // MongoDB $in operator
+    });
+
+    if (notes.length === 0) {
+      return res
+        .status(404)
+        .json({
+          message: `No notes found with tag(s): ${tagsArray.join(", ")}`,
+        });
+    }
+
+    const formattedNotes = notes.map((note) => ({
+      id: note._id,
+      title: note.title,
+      content: note.content,
+      tags: note.tags.join(", "),
+      createdAt: note.createdAt.toLocaleString(),
+      updatedAt:
+        note.updatedAt?.toLocaleString() || note.createdAt.toLocaleString(),
+    }));
+
+    res.status(200).json({
+      message: `Found ${notes.length} note(s) matching tag(s): ${tagsArray.join(
+        ", "
+      )}`,
+      count: notes.length,
+      notes: formattedNotes,
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
