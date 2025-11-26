@@ -13,6 +13,14 @@ Test all endpoints easily with **Postman**, Thunder Client, or any API client.
 
 ---
 
+## 🔗 Frontend Repository
+
+Frontend repo:
+
+👉 https://github.com/Jerrwin/Node-Notes-Frontend.git
+
+---
+
 ## ✨ Features
 - Create a new note
 - Get all notes
