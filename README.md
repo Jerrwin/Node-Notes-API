@@ -33,6 +33,23 @@ Test all endpoints easily with **Postman**, Thunder Client, or any API client.
 
 ---
 
+## 📁 Folder Structure
+
+    project/
+     ├── controllers/
+     │     └── noteController.js
+     ├── models/
+     │     └── noteModel.js
+     ├── routes/
+     │     └── noteRoutes.js
+     ├── config/
+     │     └── db.js
+     ├── index.js
+     ├── .env
+     └── package.json
+
+---
+
 ## 📥 Installation
 
 1. **Clone the repository**
@@ -75,23 +92,6 @@ Example Request (POST /notes)
   "tags": ["work", "urgent"]
 }
 ```
-
----
-
-## 📁 Folder Structure
-
-    project/
-     ├── controllers/
-     │     └── noteController.js
-     ├── models/
-     │     └── noteModel.js
-     ├── routes/
-     │     └── noteRoutes.js
-     ├── config/
-     │     └── db.js
-     ├── index.js
-     ├── .env
-     └── package.json
 
 ---
 
